@@ -1,840 +1,1029 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Nori · 紫菜工坊 | 灵感资产库</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600;800&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>紫菜工坊</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        /* ========== 全局重置 + 基础 ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      /* ========== 全局设计系统：统一墨绿基准色 ========== */
+      :root {
+        /* 基准色 — 来自 Logo-icon 的墨绿 (#5f8966) */
+        --primary: #5f8966;
+        --primary-hover: #6f9e78; /* 悬停/高亮版本 */
+        --primary-dark: #3e6b4c;
+        --primary-light: #88b391;
+        --primary-soft: rgba(95, 137, 102, 0.12);
+        --primary-glass: rgba(95, 137, 102, 0.5);
+        --primary-glass-strong: rgba(95, 137, 102, 0.75);
 
-        body {
-            background: #f2f4f8;
-            font-family: system-ui, 'Segoe UI', 'Arial', 'SF Pro Text', 'Noto Sans SC', sans-serif;
-            min-height: 100vh;
-            padding-top: 64px;          /* 避开固定导航栏，与导航栏高度一致 */
-        }
+        /* 中性色系统 (优雅灰阶) */
+        --gray-50: #f8faf7;
+        --gray-100: #f0f3ef;
+        --gray-200: #e2e8e0;
+        --gray-600: #5f6c63;
+        --gray-800: #2d3a2f;
+        --white: #ffffff;
+        --black-alpha-3: rgba(0, 0, 0, 0.03);
+        --black-alpha-8: rgba(0, 0, 0, 0.08);
+        --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.08);
+        --shadow-md: 0 12px 28px -8px rgba(0, 0, 0, 0.12);
+        --shadow-lg: 0 25px 35px -12px rgba(0, 0, 0, 0.2);
+        --shadow-focus: 0 6px 16px rgba(95, 137, 102, 0.2);
 
-        /* ========== 导航栏样式 (白底深灰字) ========== */
-        :root {
-            --green-dark: #1a3a2a;      /* 保留但导航不再使用，仅用于别处 */
-            --green-mid: #245a3e;
-            --green-light: #2d7a54;
-            --green-accent: #38b27a;
-            --white: #ffffff;
-            --gray-500: #8a9a90;
-            --gray-700: #4a5a50;
-            --nav-bg: #ffffff;
-            --nav-text: #2c3e2f;
-            --nav-text-hover: #1a2b1a;
-            --nav-icon: #7f8c8d;
-            --nav-border: #eaeef2;
-        }
+        /* 导航变量基于主色 */
+        --nav-bg: var(--white);
+        --nav-text: var(--primary);
+        --nav-text-hover: var(--primary-hover);
+        --nav-icon: #bdd3c2;
+        --nav-border: #eaf0e6;
 
-        /* 背景装饰圆 (保留原氛围) */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -40%;
-            left: -20%;
-            width: 60vw;
-            height: 60vw;
-            background: radial-gradient(circle, rgba(56,178,122,0.06) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-        }
+        /* 旧遗留变量统一迁移 (保证全站无杂乱绿) */
+        --green-accent: var(--primary);
+      }
 
-        body::after {
-            content: '';
-            position: fixed;
-            bottom: -30%;
-            right: -15%;
-            width: 50vw;
-            height: 50vw;
-            background: radial-gradient(circle, rgba(56,178,122,0.04) 0%, transparent 65%);
-            pointer-events: none;
-            z-index: 0;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        /* 导航栏 - 白底深灰 */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            height: 64px;
-            background: var(--nav-bg);
-            border-bottom: 1px solid var(--nav-border);
-            transition: box-shadow 0.3s ease;
-        }
+      body {
+        background: #f4f7f2;
+        font-family:
+          system-ui, "Segoe UI", "SF Pro Text", "Noto Sans SC", sans-serif;
+        min-height: 100vh;
+        padding-top: 64px;
+      }
 
-        nav.scrolled {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-        }
+      /* 柔和氛围光晕 (基于主色的通透感) */
+      body::before {
+        content: "";
+        position: fixed;
+        top: -40%;
+        left: -20%;
+        width: 60vw;
+        height: 60vw;
+        background: radial-gradient(
+          circle,
+          rgba(95, 137, 102, 0.06) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
 
-        .nav-inner {
-            max-width: 1100px;
-            height: 100%;
-            margin: 0 auto;
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+      body::after {
+        content: "";
+        position: fixed;
+        bottom: -30%;
+        right: -15%;
+        width: 50vw;
+        height: 50vw;
+        background: radial-gradient(
+          circle,
+          rgba(95, 137, 102, 0.045) 0%,
+          transparent 65%
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-        }
+      /* ========== 导航栏 (白底 · 主色文字) ========== */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        height: 64px;
+        background: var(--nav-bg);
+        border-bottom: 1px solid var(--nav-border);
+        transition: box-shadow 0.3s ease;
+      }
 
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: var(--nav-text);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 15px;
-            color: white;
-            transition: background 0.25s ease;
-        }
+      nav.scrolled {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
 
-        .logo:hover .logo-icon {
-            background: var(--nav-text-hover);
-        }
+      .nav-inner {
+        max-width: 1100px;
+        height: 100%;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
 
-        .logo-text {
-            font-weight: 800;
-            font-size: 18px;
-            color: var(--nav-text);
-        }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+      }
 
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 15px;
+        color: white;
+        transition: background 0.25s ease;
+      }
+
+      .logo:hover .logo-icon {
+        background: var(--primary-hover);
+      }
+
+      .logo-text {
+        font-weight: 800;
+        font-size: 18px;
+        color: var(--primary);
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        list-style: none;
+      }
+
+      .nav-links a {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--nav-text);
+        border-radius: 6px;
+        transition:
+          color 0.25s ease,
+          background 0.25s ease;
+        overflow: hidden;
+      }
+
+      .nav-icon {
+        width: 14px;
+        height: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 6px;
+        color: var(--nav-icon);
+        transition: color 0.25s ease;
+      }
+
+      .nav-links a:hover .nav-icon,
+      .nav-links a.active .nav-icon {
+        color: var(--primary-hover);
+      }
+
+      .nav-links a::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 6px;
+        background: radial-gradient(
+          circle,
+          var(--black-alpha-3) 0%,
+          transparent 70%
+        );
+        opacity: 0;
+        transition: opacity 0.25s ease;
+        pointer-events: none;
+      }
+
+      .nav-links a:hover {
+        color: var(--nav-text-hover);
+        background: rgba(95, 137, 102, 0.15);
+      }
+
+      .nav-links a:hover::before {
+        opacity: 1;
+      }
+
+      .nav-links a.active {
+        color: var(--nav-text-hover);
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: 2px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: var(--primary);
+        border-radius: 1px;
+        transform: translateX(-50%);
+        transition: width 0.25s ease;
+      }
+
+      .nav-links a:hover::after,
+      .nav-links a.active::after {
+        width: 50%;
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn-ghost,
+      .btn-primary {
+        padding: 8px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        font-family: inherit;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+
+      .btn-ghost {
+        color: var(--primary);
+        background: transparent;
+        border: 1px solid #cddfcd;
+      }
+
+      .btn-ghost:hover {
+        color: var(--primary-hover);
+        border-color: var(--primary);
+        background: #f9fbf8;
+      }
+
+      .btn-primary {
+        color: white;
+        background: var(--primary);
+        border: none;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-hover);
+      }
+
+      @media (max-width: 640px) {
         .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            list-style: none;
+          display: none;
         }
-
-        .nav-links a {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--nav-text);
-            border-radius: 6px;
-            transition: color 0.25s ease, background 0.25s ease;
-            overflow: hidden;
+        .logo-text {
+          display: none;
         }
-
-        .nav-icon {
-            width: 14px;
-            height: 14px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 6px;
-            color: var(--nav-icon);
-            flex-shrink: 0;
-            transition: color 0.25s ease;
-        }
-
-        .nav-links a:hover .nav-icon,
-        .nav-links a.active .nav-icon {
-            color: var(--nav-text-hover);
-        }
-
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 6px;
-            background: radial-gradient(circle, rgba(0,0,0,0.03) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.25s ease;
-            pointer-events: none;
-        }
-
-        .nav-links a:hover {
-            color: var(--nav-text-hover);
-            background: rgba(0, 0, 0, 0.02);
-        }
-
-        .nav-links a:hover::before {
-            opacity: 1;
-        }
-
-        .nav-links a.active {
-            color: var(--nav-text-hover);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 2px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: var(--green-accent);
-            border-radius: 1px;
-            transform: translateX(-50%);
-            transition: width 0.25s ease;
-        }
-
-        .nav-links a:hover::after,
-        .nav-links a.active::after {
-            width: 50%;
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-ghost,
-        .btn-primary {
-            padding: 8px 18px;
-            font-size: 13px;
-            font-weight: 600;
-            font-family: inherit;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.25s ease, color 0.25s ease;
-        }
-
         .btn-ghost {
-            color: var(--nav-text);
-            background: transparent;
-            border: 1px solid #cbd5e0;
+          display: none;
         }
+      }
 
-        .btn-ghost:hover {
-            color: var(--nav-text-hover);
-            border-color: var(--nav-text);
-            background: #f8f9fa;
-        }
+      /* ========== 主内容容器 ========== */
+      .background-container {
+        position: relative;
+        width: 100%;
+        background: var(--white);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0 24px 64px 24px;
+      }
 
-        .btn-primary {
-            color: white;
-            background: var(--nav-text);
-            border: none;
-        }
+      .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        background: radial-gradient(
+          circle at 10% 20%,
+          rgba(235, 245, 230, 0.5),
+          rgba(255, 255, 255, 0.92)
+        );
+        pointer-events: none;
+      }
 
-        .btn-primary:hover {
-            background: var(--nav-text-hover);
-        }
+      .content-area {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 1100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+      }
 
-        /* 响应式隐藏 (导航) */
-        @media (max-width: 640px) {
-            .nav-links { display: none; }
-            .logo-text { display: none; }
-            .btn-ghost { display: none; }
-        }
+      /* 统一墨绿调背景卡片 (原背景图+绿色系滤镜) */
+      .unified-background-card {
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: var(--shadow-lg);
+        padding: 16px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        background-image: url("test2.jpg");
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+      }
 
-        /* ========== 页面主容器 ========== */
-        .background-container {
-            position: relative;
-            width: 100%;
-            min-height: auto;
-            background: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 0 24px 64px 24px;   /* 顶部无内边距，让卡片贴近导航 */
-        }
+      .unified-background-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: brightness(0.92);
+        z-index: 1;
+        border-radius: inherit;
+        pointer-events: none;
+      }
 
-        .background-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            background: radial-gradient(circle at 10% 20%, rgba(245, 248, 250, 0.6), rgba(255, 255, 255, 0.9));
-            pointer-events: none;
-        }
+      .card-inner {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+      }
 
-        .content-area {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            max-width: 1100px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 32px;
-        }
+      .avatar-container {
+        position: relative;
+        margin-bottom: 8px;
+        padding: 30px 0px 0px 0px;
+      }
 
-        /* 统一背景卡片 */
-        .unified-background-card {
-            width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.2);
-            padding: 16px 16px 16px 16px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            background-image: url('test2.jpg');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-        }
+      .avatar {
+        width: 128px;
+        height: 128px;
+        border-radius: 50%;
+        background: #f8f9fc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow:
+          0 12px 28px -8px rgba(0, 0, 0, 0.2),
+          0 0 0 4px rgba(255, 255, 255, 0.9),
+          0 0 0 6px rgba(255, 255, 255, 0.4);
+        transition: transform 0.2s ease;
+      }
 
-        .unified-background-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: brightness(0.9);
-            z-index: 1;
-            pointer-events: none;
-            border-radius: inherit;
-        }
+      .avatar:hover {
+        transform: scale(1.02);
+      }
 
-        .card-inner {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 28px;
-        }
+      .avatar img {
+        width: 128px;
+        height: 128px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+      }
 
-        .avatar-container {
-            position: relative;
-            margin-bottom: 8px;
-            padding: 30px 0px 0px 0px;
-        }
+      /* 搜索区 (墨绿半透明玻璃效果) */
+      .search-container {
+        width: 100%;
+        max-width: 100%;
+      }
 
-        .avatar {
-            width: 128px;
-            height: 128px;
-            border-radius: 50%;
-            background: #f8f9fc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.2), 0 0 0 4px rgba(255,255,255,0.9), 0 0 0 6px rgba(255, 255,255, 0.4);
-            transition: transform 0.2s ease;
-        }
+      .search-box {
+        background: var(--primary-glass);
+        backdrop-filter: blur(8px);
+        border-radius: 8px;
+        padding: 12px;
+        transition: all 0.2s;
+        box-shadow: var(--shadow-sm);
+      }
 
-        .avatar:hover {
-            transform: scale(1.02);
-        }
+      .search-box:hover {
+        background: var(--primary-glass-strong);
+      }
 
-        .avatar img {
-            width: 128px;
-            height: 128px;
-            border-radius: 50%;
-            object-fit: cover;
-            display: block;
-        }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 20px;
+        justify-content: center;
+      }
 
-        .search-container {
-            width: 100%;
-            max-width: 100%;
-        }
+      .search-box .tag {
+        padding: 5px 14px;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(2px);
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--primary-dark);
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        border: 0.5px solid rgba(95, 137, 102, 0.3);
+      }
 
-        .search-box {
-            background: rgba(120, 158, 53, 0.5);
-            backdrop-filter: blur(8px);
-            border-radius: 8px;
-            padding: 12px 12px 12px 12px;
-            transition: all 0.2s;
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        }
+      .search-box .tag:hover {
+        background: white;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -8px var(--primary-soft);
+        border-color: var(--primary);
+      }
 
-        .search-box:hover {
-            background: rgba(70, 108, 3, 0.95);
-            border-color: rgba(76, 175, 80, 0.5);
-        }
+      .input {
+        width: 100%;
+        height: 32px;
+        padding: 0 18px;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: 1.5px solid rgba(95, 137, 102, 0.2);
+        outline: none;
+        background: white;
+        transition: all 0.25s ease;
+        color: #1e2a1f;
+      }
 
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 20px;
-            justify-content: center;
-        }
+      .input::placeholder {
+        color: #8aa38e;
+        font-weight: 400;
+      }
 
-        .tag {
-            padding: 5px 5px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(2px);
-            border-radius: 5px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #1f3b21;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-            border: 0.5px solid rgba(76, 175, 80, 0.3);
-        }
+      .input:hover {
+        border-color: var(--primary);
+        box-shadow: 0 4px 12px rgba(95, 137, 102, 0.15);
+      }
 
-        .tag:hover {
-            background: white;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px -8px rgba(76, 175, 80, 0.4);
-            border-color: #4caf50;
-        }
+      .input:focus {
+        border-color: var(--primary);
+        box-shadow: var(--shadow-focus);
+        transform: scale(1.01);
+      }
 
-        .input {
-            width: 100%;
-            height: 32px;
-            padding: 0 18px;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: 1.5px solid rgba(0, 0, 0, 0.1);
-            outline: none;
-            background: white;
-            transition: all 0.25s ease;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-            color: #1e2a1f;
-        }
+      /* ========== 工坊卡片网格 ========== */
+      .showcase-section {
+        width: 100%;
+        margin: 16px 0 20px;
+      }
 
-        .input::placeholder {
-            color: #8aa08b;
-            font-weight: 400;
-        }
+      .workshop-container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
 
-        .input:hover {
-            border-color: #8bc34a;
-            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.1);
-        }
+      .showcase-section h1 {
+        text-align: center;
+        font-size: 2.5rem;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-dark),
+          var(--primary)
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        margin-bottom: 48px;
+        position: relative;
+      }
 
-        .input:focus {
-            border-color: #4caf50;
-            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.15);
-            transform: scale(1.01);
-        }
+      .showcase-section h1::after {
+        content: "";
+        display: block;
+        width: 70px;
+        height: 4px;
+        background: var(--primary);
+        border-radius: 4px;
+        margin: 12px auto 0;
+        opacity: 0.7;
+      }
 
-        /* ========== 卡片网格区域 ========== */
-        .showcase-section {
-            width: 100%;
-            margin: 16px 0 20px 0;
-        }
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+        align-items: stretch;
+      }
 
-        .workshop-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+      .product-card {
+        position: relative;
+        aspect-ratio: 12 / 8;
+        background-color: #f0f3ee;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        transition:
+          transform 0.28s cubic-bezier(0.2, 0.9, 0.4, 1.1),
+          box-shadow 0.3s ease;
+        cursor: pointer;
+      }
 
-        .showcase-section h1 {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #1e2b1c, #4caf50);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 48px;
-            position: relative;
-        }
-        .showcase-section h1::after {
-            content: '';
-            display: block;
-            width: 70px;
-            height: 4px;
-            background: #4caf50;
-            border-radius: 4px;
-            margin: 12px auto 0;
-            opacity: 0.6;
-        }
+      .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 28px 34px -12px rgba(0, 0, 0, 0.25);
+      }
 
+      .card-media {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+
+      .card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s ease;
+      }
+
+      .product-card:hover .card-media img {
+        transform: scale(1.03);
+      }
+
+      /* 卡片右上角标签组 — 全系墨绿变体设计 */
+      .card-tags {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 12;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        gap: 10px;
+        pointer-events: none;
+      }
+
+      .card-tags .tag {
+        display: inline-block;
+        padding: 5px 12px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        border-radius: 8px;
+        backdrop-filter: blur(3px);
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s;
+        pointer-events: auto;
+        cursor: default;
+        text-transform: uppercase;
+        border: none;
+        transform: none;
+        line-height: 1.3;
+      }
+
+      .card-tags .tag:hover {
+        transform: scale(1.02);
+      }
+
+      .external-icons {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 15;
+        display: flex;
+        gap: 6px;
+      }
+      .icon-link {
+        display: block;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #6f9e78;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+      }
+      .icon-link:hover {
+        transform: scale(1.3);
+      }
+      .icon-img {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-color: #6f9e78; /* 占位色 */
+      }
+
+      /* 全新统一墨绿主题标签风格 (保留差异化视觉但全部源自基准色系) */
+      .tag-new {
+        background: linear-gradient(105deg, #4c8b5e, var(--primary-dark));
+        box-shadow: 0 2px 8px rgba(72, 130, 85, 0.3);
+      }
+      .tag-off {
+        background: linear-gradient(105deg, #5f7a5a, #3e6045);
+        box-shadow: 0 2px 8px rgba(67, 110, 75, 0.3);
+      }
+      .tag-free {
+        background: linear-gradient(105deg, #6f9e78, #478a58);
+        box-shadow: 0 2px 8px rgba(95, 137, 102, 0.4);
+      }
+      .tag-hot {
+        background: linear-gradient(105deg, #7dab6e, #5e8e52);
+        box-shadow: 0 2px 8px rgba(100, 140, 85, 0.35);
+      }
+      .tag-exclusive {
+        background: linear-gradient(105deg, #466d54, #2d543f);
+        box-shadow: 0 2px 8px rgba(56, 94, 67, 0.4);
+      }
+      .tag-limited {
+        background: linear-gradient(105deg, #609769, #3d6e49);
+        box-shadow: 0 2px 8px rgba(72, 119, 77, 0.3);
+      }
+
+      .card-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.97);
+        padding: 12px 16px 16px;
+        border-radius: 0 0 8px 8px;
+        z-index: 10;
+        border-top: 1px solid rgba(0, 0, 0, 0.02);
+        backdrop-filter: blur(2px);
+      }
+
+      .product-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--gray-800);
+        letter-spacing: -0.3px;
+        line-height: 1.3;
+      }
+
+      /* 底部绿色装饰条 — 纯正墨绿渐变 */
+      .bottom-green-area {
+        width: 100%;
+        height: 64px;
+        background: linear-gradient(
+          33deg,
+          var(--primary-glass) 0%,
+          var(--primary) 100%
+        );
+        border-radius: 8px;
+        box-shadow: 0 12px 18px -8px rgba(62, 107, 76, 0.25);
+        transition: all 0.25s ease;
+        cursor: default;
+        margin-top: 8px;
+      }
+
+      .bottom-green-area:hover {
+        background: linear-gradient(99deg, var(--primary-dark), #2b553b);
+      }
+
+      .footer-info {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.85);
+        text-align: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        padding-top: 12px;
+        margin-top: 4px;
+      }
+      .footer-info p {
+        margin: 0;
+        letter-spacing: 0.3px;
+      }
+
+      /* 响应式设计 */
+      @media (max-width: 1024px) {
         .card-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 28px;
-            align-items: stretch;
+          gap: 20px;
         }
-
-        .product-card {
-            position: relative;
-            aspect-ratio: 12 / 8;
-            background-color: #f0f0f0;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.02);
-            transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.4, 1.1), box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 28px 34px -12px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .card-media {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .card-media img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-
-        .product-card:hover .card-media img {
-            transform: scale(1.03);
-        }
-
-        .card-tags {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            z-index: 12;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 10px;
-            pointer-events: none;
-        }
-
-        .card-tags .tag {
-            display: inline-block;
-            padding: 6px 14px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-            border-radius: 8px;
-            backdrop-filter: blur(4px);
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s;
-            pointer-events: auto;
-            cursor: default;
-            line-height: 1.2;
-            text-transform: uppercase;
-            font-weight: 800;
-            border: none;
-            transform: none;
-        }
-
-        .card-tags .tag:hover {
-            transform: scale(1.02);
-            background: rgba(0,0,0,0.85);
-        }
-
-        .tag-new { background: linear-gradient(105deg, #2b7e3a, #1e5a2d); box-shadow: 0 2px 8px rgba(43, 126, 58, 0.3); }
-        .tag-off { background: linear-gradient(105deg, #e65c1e, #c73b0b); box-shadow: 0 2px 8px rgba(230, 92, 30, 0.3); }
-        .tag-free { background: linear-gradient(105deg, #1e88e5, #0d5c9e); box-shadow: 0 2px 8px rgba(30, 136, 229, 0.3); }
-        .tag-hot { background: linear-gradient(105deg, #f5a623, #d97a0c); box-shadow: 0 2px 8px rgba(245, 166, 35, 0.3); }
-        .tag-exclusive { background: linear-gradient(105deg, #9c27b0, #6a1b9a); box-shadow: 0 2px 8px rgba(156, 39, 176, 0.3); }
-        .tag-limited { background: linear-gradient(105deg, #00acc1, #00838f); }
-
-        .card-info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.96);
-            padding: 12px 16px 16px 16px;
-            border-radius: 0 0 6px 6px;
-            z-index: 10;
-            border-top: 1px solid rgba(0, 0, 0, 0.02);
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.02);
-        }
-
         .product-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #1f2a1b;
-            letter-spacing: -0.3px;
-            line-height: 1.3;
+          font-size: 1rem;
         }
-
-        @media (max-width: 1024px) {
-            .card-grid { gap: 20px; }
-            .product-title { font-size: 1rem; }
-            .card-info { padding: 12px 14px; }
+        .card-info {
+          padding: 12px 14px;
         }
+      }
 
-        @media (max-width: 780px) {
-            .card-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-            .showcase-section h1 { font-size: 2rem; margin-bottom: 32px; }
+      @media (max-width: 780px) {
+        .card-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
         }
-
-        @media (max-width: 540px) {
-            .card-grid { grid-template-columns: 1fr; max-width: 380px; margin: 0 auto; gap: 24px; }
-            .product-card { aspect-ratio: 3/4; }
+        .showcase-section h1 {
+          font-size: 2rem;
+          margin-bottom: 32px;
         }
+      }
 
-        .product-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40%;
-            background: linear-gradient(to top, rgba(0,0,0,0.02), transparent);
-            pointer-events: none;
-            z-index: 5;
-            border-radius: 0 0 8px 8px;
+      @media (max-width: 640px) {
+        .background-container {
+          padding: 0 16px 48px;
         }
-
+        .unified-background-card {
+          padding: 28px 20px 36px;
+        }
+        .avatar {
+          width: 100px;
+          height: 100px;
+        }
+        .avatar img {
+          width: 100px;
+          height: 100px;
+        }
+        .search-box .tag {
+          padding: 4px 12px;
+          font-size: 0.75rem;
+        }
+        .input {
+          height: 48px;
+        }
         .bottom-green-area {
-            width: 100%;
-            height: 64px;
-            background: linear-gradient(105deg, #4caf50 0%, #2e7d32 100%);
-            border-radius: 8px;
-            box-shadow: 0 12px 18px -8px rgba(46, 125, 50, 0.2);
-            transition: all 0.2s ease;
-            cursor: default;
-            margin-top: 8px;
+          height: 54px;
         }
+      }
 
-        .bottom-green-area:hover {
-            transform: scale(0.99);
-            background: linear-gradient(105deg, #43a047, #2c6e2f);
+      @media (max-width: 540px) {
+        .card-grid {
+          grid-template-columns: 1fr;
+          max-width: 380px;
+          margin: 0 auto;
+          gap: 24px;
         }
+        .product-card {
+          aspect-ratio: 3/4;
+        }
+      }
 
-        @media (max-width: 640px) {
-            .background-container { padding: 0 16px 48px; }
-            .unified-background-card { padding: 28px 20px 36px 20px; border-radius: 8px; }
-            .avatar { width: 100px; height: 100px; }
-            .avatar img { width: 100px; height: 100px; }
-            .tag { padding: 5px 14px; font-size: 0.8rem; }
-            .search-box { padding: 16px 18px 20px 18px; }
-            .input { height: 50px; font-size: 0.95rem; }
-            .bottom-green-area { height: 54px; border-radius: 8px; }
-        }
+      .search-container {
+        animation: fadeSlideUp 0.5s ease-out;
+      }
 
-        .search-container {
-            animation: fadeSlideUp 0.5s ease-out;
+      @keyframes fadeSlideUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
         }
-
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
     </style>
-</head>
-<body>
-
-    <!-- 导航栏 (白底深灰文字) -->
+  </head>
+  <body>
     <nav id="navbar">
-        <div class="nav-inner">
-            <a href="#" class="logo">
-                <span class="logo-icon">Z</span>
-                <span class="logo-text">Nori</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="#" class="active">●首页</a></li>
-                <li><a href="#">●素材</a></li>
-                <li><a href="#">●视频</a></li>
-                <li><a href="#">●文档</a></li>
-                <li><a href="#">●其他</a></li>
-            </ul>
-            <div class="nav-actions">
-                <button class="btn-ghost">注册</button>
-                <button class="btn-primary">登陆</button>
-            </div>
+      <div class="nav-inner">
+        <a href="#" class="logo">
+          <span class="logo-icon">N</span>
+          <span class="logo-text">紫菜工坊</span>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#" class="active">●首页</a></li>
+          <li><a href="#">●素材</a></li>
+          <li><a href="#">●视频</a></li>
+          <li><a href="#">●文档</a></li>
+          <li><a href="#">●其他</a></li>
+        </ul>
+        <div class="nav-actions">
+          <button class="btn-ghost">圈圈</button>
+          <button class="btn-primary">测试</button>
         </div>
+      </div>
     </nav>
 
-    <!-- 主体区域 -->
     <div class="background-container">
-        <div class="background-image"></div>
-        <div class="content-area">
-
-            <!-- 统一背景卡片 -->
-            <div class="unified-background-card">
-                <div class="card-inner">
-                    <div class="avatar-container">
-                        <div class="avatar">
-                            <img src="Pancham.jpg" alt="作者头像 | Nori 创作者">
-                        </div>
-                    </div>
-                    <div class="search-container">
-                        <div class="search-box">
-                            <div class="tags">
-                                <div class="tag">🌿  人物</div>
-                                <div class="tag">🌿 场景</div>
-                                <div class="tag">🌿  植物</div>
-                                <div class="tag">🌿  艺术</div>
-                            </div>
-                            <input type="text" class="input" placeholder="● 搜索">
-                        </div>
-                    </div>
-                </div>
+      <div class="background-image"></div>
+      <div class="content-area">
+        <!-- 统一背景卡片 (墨绿氛围) -->
+        <div class="unified-background-card">
+          <div class="external-icons">
+            <a href="#" class="icon-link"
+              ><div
+                class="icon-img"
+                style="background-image: url(&quot;图标1占位图.jpg&quot;)"
+              ></div
+            ></a>
+            <a href="#" class="icon-link"
+              ><div
+                class="icon-img"
+                style="background-image: url(&quot;图标2占位图.jpg&quot;)"
+              ></div
+            ></a>
+            <a href="#" class="icon-link"
+              ><div
+                class="icon-img"
+                style="background-image: url(&quot;图标3占位图.jpg&quot;)"
+              ></div
+            ></a>
+            <a href="#" class="icon-link"
+              ><div
+                class="icon-img"
+                style="background-image: url(&quot;图标4占位图.jpg&quot;)"
+              ></div
+            ></a>
+            <a href="#" class="icon-link"
+              ><div
+                class="icon-img"
+                style="background-image: url(&quot;图标5占位图.jpg&quot;)"
+              ></div
+            ></a>
+          </div>
+          <div class="card-inner">
+            <div class="avatar-container">
+              <div class="avatar">
+                <img src="avatar.jpg" alt="avatar" />
+              </div>
             </div>
-
-            <!-- 卡片网格 (紫菜工坊) -->
-            <div class="showcase-section">
-                <div class="workshop-container">
-                    <div class="card-grid">
-                        <div class="product-card">
-                            <div class="card-media">
-                                <img src="test2.jpg" alt="UI 组件库" loading="lazy">
-                            </div>
-                            <div class="card-tags">
-                                <span class="tag tag-new">NEW</span>
-                                <span class="tag tag-off">20%</span>
-                            </div>
-                            <div class="card-info">
-                                <div class="product-title">1号测试</div>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="card-media">
-                                <img src="test2.jpg" alt="3D 人物" loading="lazy">
-                            </div>
-                            <div class="card-tags">
-                                <span class="tag tag-free">免费</span>
-                                <span class="tag tag-hot">NEW</span>
-                            </div>
-                            <div class="card-info">
-                                <div class="product-title">2号测试</div>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="card-media">
-                                <img src="test2.jpg" alt="骨骼模版" loading="lazy">
-                            </div>
-                            <div class="card-tags">
-                                <span class="tag tag-exclusive">独家</span>
-                                <span class="tag tag-limited">免费</span>
-                            </div>
-                            <div class="card-info">
-                                <div class="product-title">3号测试</div>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="card-media">
-                                <img src="test2.jpg" alt="植物素材" loading="lazy">
-                            </div>
-                            <div class="card-tags">
-                                <span class="tag tag-new">New</span>
-                                <span class="tag tag-off">骨骼</span>
-                            </div>
-                            <div class="card-info">
-                                <div class="product-title">4号测试</div>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="card-media">
-                                <img src="test2.jpg" alt="科幻场景" loading="lazy">
-                            </div>
-                            <div class="card-tags">
-                                <span class="tag tag-free">🏷️ 免费</span>
-                                <span class="tag tag-hot">科幻</span>
-                            </div>
-                            <div class="card-info">
-                                <div class="product-title">5号测试</div>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="card-media">
-                                <img src="test2.jpg" alt="风格化角色" loading="lazy">
-                            </div>
-                            <div class="card-tags">
-                                <span class="tag tag-new">推荐</span>
-                                <span class="tag tag-exclusive">会员专享</span>
-                            </div>
-                            <div class="card-info">
-                                <div class="product-title">6号测试</div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="search-container">
+              <div class="search-box">
+                <div class="tags">
+                  <div class="tag">🌿 人物设计</div>
+                  <div class="tag">🌿 场景概念</div>
+                  <div class="tag">🌿 植物素材</div>
+                  <div class="tag">🌿 艺术笔刷</div>
                 </div>
+                <input
+                  type="text"
+                  class="input"
+                  placeholder="● 搜索"
+                />
+              </div>
             </div>
-
-            <!-- 底部绿色装饰条 -->
-            <div class="bottom-green-area"></div>
+          </div>
         </div>
+
+        <!-- 紫菜工坊 · 墨绿卡片网格 -->
+        <div class="showcase-section">
+          <div class="workshop-container">
+            <div class="card-grid">
+              <div class="product-card">
+                <div class="card-media">
+                  <img src="test2.jpg" alt="UI 资源集" loading="lazy" />
+                </div>
+                <div class="card-tags">
+                  <span class="tag tag-new">NEW</span>
+                  <span class="tag tag-off">限量</span>
+                </div>
+                <div class="card-info">
+                  <div class="product-title">1号测试 · 墨韵组件</div>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="card-media">
+                  <img src="test2.jpg" alt="3D 角色" loading="lazy" />
+                </div>
+                <div class="card-tags">
+                  <span class="tag tag-free">免费</span>
+                  <span class="tag tag-hot">推荐</span>
+                </div>
+                <div class="card-info">
+                  <div class="product-title">2号测试 · 灵植精灵</div>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="card-media">
+                  <img src="test2.jpg" alt="骨骼绑定" loading="lazy" />
+                </div>
+                <div class="card-tags">
+                  <span class="tag tag-exclusive">独家</span>
+                  <span class="tag tag-limited">限定</span>
+                </div>
+                <div class="card-info">
+                  <div class="product-title">3号测试 · 幻境骨骼</div>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="card-media">
+                  <img src="test2.jpg" alt="植物资源包" loading="lazy" />
+                </div>
+                <div class="card-tags">
+                  <span class="tag tag-new">上新</span>
+                  <span class="tag tag-off">8折</span>
+                </div>
+                <div class="card-info">
+                  <div class="product-title">4号测试 · 蕨类生态</div>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="card-media">
+                  <img src="test2.jpg" alt="科幻场景" loading="lazy" />
+                </div>
+                <div class="card-tags">
+                  <span class="tag tag-free">🏷️ 免费领</span>
+                  <span class="tag tag-hot">蒸汽丛林</span>
+                </div>
+                <div class="card-info">
+                  <div class="product-title">5号测试 · 绿野幻城</div>
+                </div>
+              </div>
+              <div class="product-card">
+                <div class="card-media">
+                  <img src="test2.jpg" alt="风格角色" loading="lazy" />
+                </div>
+                <div class="card-tags">
+                  <span class="tag tag-new">绝赞</span>
+                  <span class="tag tag-exclusive">工坊之选</span>
+                </div>
+                <div class="card-info">
+                  <div class="product-title">6号测试 · 苔灵志</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-green-area">
+          <div class="footer-info">
+            <p>© 2025 紫菜工坊 | 菜ICP备XXXXXXX号 | 本网站内容受版权保护</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
-        (function() {
-            const navbar = document.getElementById('navbar');
-            let ticking = false;
-            window.addEventListener('scroll', () => {
-                if (!ticking) {
-                    requestAnimationFrame(() => {
-                        navbar.classList.toggle('scrolled', window.scrollY > 20);
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
+      (function () {
+        const navbar = document.getElementById("navbar");
+        let ticking = false;
+        window.addEventListener("scroll", () => {
+          if (!ticking) {
+            requestAnimationFrame(() => {
+              navbar.classList.toggle("scrolled", window.scrollY > 20);
+              ticking = false;
             });
+            ticking = true;
+          }
+        });
 
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', e => {
-                    e.preventDefault();
-                    document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                });
+        // 导航激活效果 (避免实际跳转)
+        document.querySelectorAll(".nav-links a").forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            document
+              .querySelectorAll(".nav-links a")
+              .forEach((l) => l.classList.remove("active"));
+            link.classList.add("active");
+          });
+        });
+
+        // 搜索区域 tag 填入输入框 (增强交互)
+        const searchTags = document.querySelectorAll(".search-box .tag");
+        const searchInput = document.querySelector(".input");
+        if (searchTags.length && searchInput) {
+          searchTags.forEach((tag) => {
+            tag.addEventListener("click", (e) => {
+              e.stopPropagation();
+              let tagText = tag.innerText.replace(/[🌿✨🔍]/g, "").trim();
+              searchInput.value = tagText;
+              searchInput.focus();
+              tag.style.transform = "scale(0.96)";
+              setTimeout(() => {
+                tag.style.transform = "";
+              }, 150);
             });
+          });
+        }
 
-            const searchTags = document.querySelectorAll('.search-box .tag');
-            const searchInput = document.querySelector('.input');
-            if (searchTags.length && searchInput) {
-                searchTags.forEach(tag => {
-                    tag.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        let tagText = tag.innerText.replace(/[✨🌿🌸🎨]/g, '').trim();
-                        searchInput.value = tagText;
-                        searchInput.focus();
-                        tag.style.transform = 'scale(0.96)';
-                        setTimeout(() => {
-                            tag.style.transform = '';
-                        }, 150);
-                    });
-                });
-            }
+        // 卡片标签微动效
+        const cardTags = document.querySelectorAll(".card-tags .tag");
+        cardTags.forEach((tag) => {
+          tag.addEventListener("mouseenter", () => {
+            tag.style.transform = "scale(1.03)";
+            tag.style.transition = "0.12s";
+          });
+          tag.addEventListener("mouseleave", () => {
+            tag.style.transform = "scale(1)";
+          });
+        });
 
-            const cardTags = document.querySelectorAll('.card-tags .tag');
-            cardTags.forEach(tag => {
-                tag.addEventListener('mouseenter', () => {
-                    tag.style.transform = 'scale(1.02)';
-                    tag.style.transition = '0.1s';
-                });
-                tag.addEventListener('mouseleave', () => {
-                    tag.style.transform = 'scale(1)';
-                });
-            });
+        // 底部装饰条轻反馈
+        const bottomArea = document.querySelector(".bottom-green-area");
+        if (bottomArea) {
+          bottomArea.addEventListener("click", () => {
+            bottomArea.style.opacity = "0.85";
+            setTimeout(() => {
+              bottomArea.style.opacity = "1";
+            }, 150);
+          });
+        }
 
-            const bottomArea = document.querySelector('.bottom-green-area');
-            if (bottomArea) {
-                bottomArea.addEventListener('click', () => {
-                    bottomArea.style.opacity = '0.9';
-                    setTimeout(() => {
-                        bottomArea.style.opacity = '1';
-                    }, 150);
-                });
-            }
-
-            console.log('✨ 导航栏已改为白底深灰字风格');
-        })();
+        console.log("✔ 墨绿设计系统已统一 — 基准色 #5f8966 / 全变量化主题");
+      })();
     </script>
-</body>
+  </body>
 </html>
